@@ -1,4 +1,4 @@
-
+do section: $course_id_temp = $course_id;
         <div class='container'>
             <div class="gallery">
               
