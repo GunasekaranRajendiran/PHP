@@ -1,0 +1,32 @@
+<?php
+session_start();
+include_once 'admin/config.php';
+echo 'started';
+if(isset($_POST['forgot']))
+{
+    $user_id = $_POST['user'];
+  	echo $user_id;
+    if($user_id != "" or " "){
+     	echo"user id is empty";
+        }
+    else{  
+  
+    	$result = mysqli_query($db,"SELECT * FROM tbl_student where student_id='" . $_POST['user'] . "'");
+    	$row = mysqli_fetch_assoc($result);
+		$fetch_user_id=$row['student_id'];
+		$email_id=$row['field4'];
+  		echo 'before if';
+		if($user_id==$fetch_user_id) {
+				echo 'after if';
+          		$to = $email_id;
+                $subject = "Password";
+                $txt = "Your password is :";
+                $headers = "From: gunasekaran.sae@gmail.com" . "\r\n" ;
+                mail($to,$subject,$txt,$headers);
+			}
+		 else{
+					echo 'invalid userid';
+	         }
+    }
+}
+echo"success";
