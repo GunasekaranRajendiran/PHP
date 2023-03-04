@@ -1,32 +1,71 @@
 <?php
 session_start();
 include_once 'admin/config.php';
-echo 'started';
 if(isset($_POST['forgot']))
 {
     $user_id = $_POST['user'];
-  	echo $user_id;
+    $student_id=$user_id;
     if($user_id != "" or " "){
-     	echo"user id is empty";
-        }
-    else{  
-  
-    	$result = mysqli_query($db,"SELECT * FROM tbl_student where student_id='" . $_POST['user'] . "'");
+        $result = mysqli_query($db,"SELECT * FROM tbl_student where student_id='" . $_POST['user'] . "'");
     	$row = mysqli_fetch_assoc($result);
 		$fetch_user_id=$row['student_id'];
 		$email_id=$row['field4'];
-  		echo 'before if';
-		if($user_id==$fetch_user_id) {
-				echo 'after if';
+  		
+		      if($user_id==$fetch_user_id) {
+				
           		$to = $email_id;
                 $subject = "Password";
-                $txt = "Your password is :";
-                $headers = "From: gunasekaran.sae@gmail.com" . "\r\n" ;
+                $txt = "https://sidvinartclass.com/reset.php?student_id=".$student_id;
+                $headers = "From:info@sidvinartclass.com" . "\r\n" ;
                 mail($to,$subject,$txt,$headers);
-			}
-		 else{
-					echo 'invalid userid';
-	         }
-    }
+                echo'<script>
+                         window.location.href = "index.php";
+                         alert("Password reset link sent your mail id  !!")
+                      </script>';	
+          		
+			     }
+		     else{
+				echo'<script>
+                                      window.location.href = "forget.php";
+                                      alert(" Invalid user id !!")
+                                    </script>';	
+                 }
+        
+    } 
 }
-echo"success";
+elseif (isset($_POST['forgot'])){
+         $email = $_POST['email'];
+  		// $email_id=$row['field4'];
+  		 $email_id=$email;
+echo"before query ".$email;
+           if($email != "" or " "){
+               	$result = mysqli_query($db,"SELECT * FROM tbl_student where field4='" . $email."'");
+                $row = mysqli_fetch_assoc($result);
+				$fetch_email_id=$row['field4'];
+				
+  				$student_id=$row['student_id'];
+             echo $student_id;
+			    if($email==$fetch_email_id) {
+				$to = $email_id;
+               	$subject = "Password";
+                $txt = "https://sidvinartclass.com/reset.php?student_id=".$student_id;
+                $headers = "From: info@sidvinartclass.com" . "\r\n" ;
+                mail($to,$subject,$txt,$headers);
+                echo'<script>
+                   window.location.href = "index.php";
+                   alert("Password reset link sent your mail id  !!")
+                  </script>';	
+                }
+           		else{
+        			echo'<script>
+                    window.location.href = "forget.php";
+                    alert(" Invalid mail id !!")
+                    </script>';	
+                     }
+         		
+           }     
+     
+}  
+?>
+
+
